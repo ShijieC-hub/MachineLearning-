@@ -103,7 +103,7 @@ public class MnistRead {
      * @param high        high
      * @param fileName    image saved file.
      */
-    public static void drawGrayPicture(double[] pixelValues, int width, int high, String fileName) throws IOException {
+    public static BufferedImage drawGrayPicture(double[] pixelValues, int width, int high, String fileName) throws IOException {
         BufferedImage bufferedImage = new BufferedImage(width, high, BufferedImage.TYPE_INT_RGB);
         for (int i = 0; i < width; i++) {
             for (int j = 0; j < high; j++) {
@@ -112,7 +112,7 @@ public class MnistRead {
                 bufferedImage.setRGB(j, i, value);
             }
         }
-        ImageIO.write(bufferedImage, "JPEG", new File(fileName));
+        return bufferedImage;
     }
 
     public static void main(String[] args) {
