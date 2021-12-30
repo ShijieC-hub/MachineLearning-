@@ -122,7 +122,7 @@ public class MnistRead {
 
         for (int i = 0; i < 10; i++) {
             try {
-                drawGrayPicture(images[i], 28, 28, "Test" + name ++);
+                drawGrayPicture(images[i], 28, 28, "Test" + name ++ + ".jpg");
             } catch (IOException exception) {
                 exception.printStackTrace();
             }
