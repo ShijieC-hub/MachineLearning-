@@ -6,13 +6,10 @@ public class Algo {
      * image和 sampleImg长宽应该一致
      * @param image 传入需要比对的图片
      * @param sampleImg 样本图片
-     * @return 相似度
+     * @return 汉明距离
      */
     public int compareImage(BufferedImage image,BufferedImage sampleImg){
 
-        //先都二值化
-        BufferedImage image2 = erzhi(image,128);
-        BufferedImage sampleImg2 = erzhi(sampleImg,128);
 
         int wight = 28;
         int height = 28;
@@ -21,7 +18,7 @@ public class Algo {
         //如果像素点一样，num++
         for (int i = 0; i < wight; i++) {
             for (int j = 0; j < height; j++) {
-                if(image2.getRGB(i,j) == Color.black.getRGB() && image2.getRGB(i,j) == sampleImg2.getRGB(i,j)){
+                if(image.getRGB(i,j) != sampleImg.getRGB(i,j)){
                     num++;
                 }
             }
@@ -29,6 +26,7 @@ public class Algo {
 
 
         return num;
+
     }
 
     //获取灰度
@@ -45,7 +43,7 @@ public class Algo {
     }
 
     //二值化
-    public BufferedImage erzhi(BufferedImage bufferedImage,int k){
+    public BufferedImage erzhi(BufferedImage bufferedImage,int k,boolean flag){
 
         int width = bufferedImage.getWidth();
         int hight = bufferedImage.getHeight();
@@ -54,9 +52,18 @@ public class Algo {
         for (int i = 0; i < width; i++) {
             for (int j = 0; j < hight; j++) {
                 if(getgray(bufferedImage,i,j) > k){
-                    bf.setRGB(i,j, Color.WHITE.getRGB());
+                    if(flag){
+                        bf.setRGB(i,j, Color.WHITE.getRGB());
+                    }else {
+                        bf.setRGB(i,j,Color.BLACK.getRGB());
+                    }
+
                 }else {
-                    bf.setRGB(i,j,Color.BLACK.getRGB());
+                    if(flag){
+                        bf.setRGB(i,j,Color.BLACK.getRGB());
+                    }else {
+                        bf.setRGB(i,j, Color.WHITE.getRGB());
+                    }
                 }
             }
         }

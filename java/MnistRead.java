@@ -8,6 +8,8 @@ import java.awt.image.BufferedImage;
 import java.io.BufferedInputStream;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.util.*;
+import java.util.Map.Entry;
 
 public class MnistRead extends JPanel{
     public static final String TRAIN_IMAGES_FILE = "resources/train-images.idx3-ubyte";
@@ -146,10 +148,10 @@ public class MnistRead extends JPanel{
 
         Graphics g = this.getGraphics();
         Graphics2D g2d = (Graphics2D)g;
-        g2d.setStroke(new BasicStroke(150));
+        g2d.setStroke(new BasicStroke(130));
         Graphics imgg = bufferedImage.getGraphics();
         Graphics2D img2d = (Graphics2D)imgg;
-        img2d.setStroke(new BasicStroke(150));
+        img2d.setStroke(new BasicStroke(130));
 
         JButton jButton = new JButton("识别");
         jButton.addActionListener(new ActionListener() {
@@ -157,22 +159,7 @@ public class MnistRead extends JPanel{
             @Override
             public void actionPerformed(ActionEvent e) {
                 BufferedImage bf= changeSize(bufferedImage,28,28);
-                for (int i = 0; i < bf.getWidth(); i++) {
-                    for (int j = 0; j < bf.getHeight(); j++) {
-                        System.out.print(bf.getRGB(i, j));
-                    }
-                    System.out.println();
-                }
-//                g.drawImage(bf,100,100,null);
-//                g.drawLine(0,0,100,100);
-//                System.out.println("a");
                 distinguish(bf);
-                for (int i = 0; i < bf.getWidth(); i++) {
-                    for (int j = 0; j < bf.getHeight(); j++) {
-                        System.out.print(bf.getRGB(i, j));
-                    }
-                    System.out.println();
-                }
             }
         });
         east.add(jButton);
@@ -206,27 +193,131 @@ public class MnistRead extends JPanel{
     public void distinguish(BufferedImage image){
         double[][] images = getImages(TRAIN_IMAGES_FILE);
         double[] labels = getLabels(TRAIN_LABELS_FILE);
-        int similarNum = 0;//最高相似度
-        int value = -1;//最高相似度对应的值
-        int similar = 0;//当前相似度
+        ArrayList<Key_Value> hanmingarr = new ArrayList<>();//存放汉明距离,key=汉明距离，value=对应的值
+        int hanmingsize = 0;//汉明距离
         Algo algo = new Algo();
+        BufferedImage image2 = algo.erzhi(image,200,false);
         for (int i = 0; i < images.length; i++) {
             BufferedImage sampleImg = drawGrayPicture(images[i],28,28);//获取i位置的样本图片
-            similar = algo.compareImage(image,sampleImg);//对比两个图片,返回相似度
-            if(similar > similarNum){
-                similarNum = similar;
-                value = (int)labels[i];
-            }
-//            System.out.println(labels[i]);
+            //先都二值化
+            BufferedImage sampleImg2 = algo.erzhi(sampleImg,200,true);
+            hanmingsize = algo.compareImage(image2,sampleImg2);//对比两个图片,返回汉明距离
+            Key_Value a = new Key_Value(hanmingsize,(int)labels[i]);//存放汉明距离，对应的值,都是Integer类型
+            hanmingarr.add(a);
+
         }
-        System.out.println(value);
+        //现在已经获得了需要对比的图片和所有样本图片的汉明距离以及对应的值，存放在了hanmingarr中
+        int k = 200;//k
+        //对hanmingarr按key进行排序
+        Collections.sort(hanmingarr,new Comparator<Key_Value>(){
+            @Override
+            public int compare(Key_Value o1, Key_Value o2) {
+                return o1.getKey() - o2.getKey();
+            }
+        });
+        for (int i = 0; i < k; i++) {
+            System.out.println(hanmingarr.get(i).getKey()+":"+hanmingarr.get(i).getValue());
+        }
+        int maxValue = -1;
+        int value = -1;
+        int num0 = 0;
+        int num1 = 0;
+        int num2 = 0;
+        int num3 = 0;
+        int num4 = 0;
+        int num5 = 0;
+        int num6 = 0;
+        int num7 = 0;
+        int num8 = 0;
+        int num9 = 0;
+        for (int i = 0; i < k; i++) {
+            if(hanmingarr.get(i).getValue() == 0){
+                num0++;
+                if(num0>maxValue){
+                    maxValue = num0;
+                    value = 0;
+                }
+            }
+            if(hanmingarr.get(i).getValue() == 1){
+                num1++;
+                if(num1>maxValue){
+                    maxValue = num1;
+                    value = 1;
+                }
+            }
+            if(hanmingarr.get(i).getValue() == 2){
+                num2++;
+                if(num2>maxValue){
+                    maxValue = num2;
+                    value = 2;
+                }
+            }
+            if(hanmingarr.get(i).getValue() == 3){
+                num3++;
+                if(num3>maxValue){
+                    maxValue = num3;
+                    value = 3;
+                }
+            }
+            if(hanmingarr.get(i).getValue() == 4){
+                num4++;
+                if(num4>maxValue){
+                    maxValue = num4;
+                    value = 4;
+                }
+            }
+            if(hanmingarr.get(i).getValue() == 5){
+                num5++;
+                if(num5>maxValue){
+                    maxValue = num5;
+                    value = 5;
+                }
+            }
+            if(hanmingarr.get(i).getValue() == 6){
+                num6++;
+                if(num6>maxValue){
+                    maxValue = num6;
+                    value = 6;
+                }
+            }
+            if(hanmingarr.get(i).getValue() == 7){
+                num7++;
+                if(num7>maxValue){
+                    maxValue = num7;
+                    value = 7;
+                }
+            }
+            if(hanmingarr.get(i).getValue() == 8){
+                num8++;
+                if(num8>maxValue){
+                    maxValue = num8;
+                    value = 8;
+                }
+            }
+            if(hanmingarr.get(i).getValue() == 9){
+                num9++;
+                if(num9>maxValue){
+                    maxValue = num9;
+                    value = 9;
+                }
+            }
+        }
+
+        System.out.println("识别值为：" + value);
     }
 
     //改变图片大小
+    /**
+     *
+     * @param bf 要改变的图片
+     * @param w 要改为的宽
+     * @param h 要改为的高
+     * @return 该过后的图片
+     */
     public BufferedImage changeSize(BufferedImage bf,int w,int h){
-        BufferedImage bufferedImage = new BufferedImage(w,h,3);
+        BufferedImage bufferedImage = new BufferedImage(w,h,BufferedImage.TYPE_INT_RGB);
         Graphics g = bufferedImage.getGraphics();
-        g.drawImage(bf,0,0,w,h,null);
+        g.drawImage(bf.getScaledInstance(w,h,Image.SCALE_SMOOTH),0,0,null);
         return bufferedImage;
     }
 
